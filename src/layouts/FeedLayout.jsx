@@ -1,7 +1,4 @@
 import React from "react";
-import PostBox from "../components/organisms/PostBox";
-import PostCard from "../components/organisms/PostCard";
-import CreatePostModal from "../Modals/CreatePostModal";
 
 function FeedLayout({ children }) {
   return (

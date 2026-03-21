@@ -1,54 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import PostInput from "../molecules/PostInput";
-import { BiSolidVideos } from "react-icons/bi";
-import { FaImages } from "react-icons/fa";
-import { PiArticleNyTimesFill } from "react-icons/pi";
-import CreatePostModal from "../../Modals/CreatePostModal";
+import { FaImage, FaVideo } from "react-icons/fa";
+import { MdArticle } from "react-icons/md";
+import PostTypes from "../molecules/PostTypes";
 
-function PostBox({ onCreate }) {
-  const actions = [
+function PostBox({ onOpen }) {
+  const postTypes = [
     {
+      icon: <FaImage />,
       label: "Image",
-      icon: <FaImages className="text-blue-500" />,
     },
     {
+      icon: <FaVideo />,
       label: "Video",
-      icon: <BiSolidVideos className="text-green-500" />,
     },
     {
+      icon: <MdArticle />,
       label: "Article",
-      icon: <PiArticleNyTimesFill className="text-orange-500" />,
     },
   ];
-  const [open, setOpen] = useState(false);
 
   return (
-    <div className="w-full  mx-auto bg-white rounded-2xl shadow-md p-4 flex flex-col gap-4">
+    <div className="w-full  bg-white border rounded-xl shadow-sm p-4 flex flex-col gap-4">
+      {/* Input Section */}
       <PostInput
-        className="w-full font-semibold border rounded-xl p-3 outline-none cursor-pointer hover:bg-gray-100 transition"
+        onClick={onOpen}
+        className="w-full bg-gray-100 hover:bg-gray-200 p-3 px-4 rounded-full text-sm cursor-pointer transition"
         placeholder="Start a post..."
-        onClick={() => setOpen(true)}
-      />
-      <CreatePostModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onCreate={onCreate}
       />
 
-      <div className="h-[1px] bg-gray-200" />
+      {/* Divider */}
+      <div className="border-t"></div>
 
+      {/* Post Types */}
       <div className="flex justify-between">
-        {actions.map((action, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition"
-          >
-            {action.icon}
-            <span className="text-sm font-medium text-gray-600">
-              {action.label}
-            </span>
-          </div>
-        ))}
+        <PostTypes postTypes={postTypes} />
       </div>
     </div>
   );
