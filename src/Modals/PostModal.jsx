@@ -4,7 +4,7 @@ import Button from "../components/atoms/Button";
 import { createPostService } from "../services/postService";
 import { user } from "../constants/currentUser";
 
-function PostModal({ isOpen, onClose, type }) {
+function PostModal({ isOpen, onClose, type, onCreate }) {
   if (!isOpen) return null;
 
   const textRef = useRef();
@@ -20,23 +20,21 @@ function PostModal({ isOpen, onClose, type }) {
       fileUrl = URL.createObjectURL(file);
     }
 
-    // 🔥 STEP 1: Create raw post object
     const post = {
       caption: caption.trim(),
       image: type === "Image" ? fileUrl : null,
       video: type === "Video" ? fileUrl : null,
     };
 
-    // ❌ empty validation
     if (!post.caption) {
-      console.log("❌ Empty post not allowed");
+      console.log(" Empty post not allowed");
+      alert("Please Add something to Post");
       return;
     }
 
-    // 🔥 STEP 2: Use service
     const finalPost = createPostService(user, post);
 
-    console.log("🔥 Final Post Object:", finalPost);
+    onCreate(finalPost);
 
     onClose();
   };

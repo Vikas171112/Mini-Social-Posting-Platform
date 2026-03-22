@@ -8,10 +8,10 @@ function PostHeader({ user, onEdit, onDelete }) {
   return (
     <div className="flex items-center justify-between p-3 relative">
       <div className="flex items-center gap-3">
-        <Avatar src={user.avatar} />
+        <Avatar src={user?.avatar} />
 
         <div>
-          <p className="text-sm font-semibold">{user.name}</p>
+          <p className="text-sm font-semibold">{user?.name}</p>
           <p className="text-xs text-gray-500">5 min ago</p>
         </div>
       </div>
