@@ -7,7 +7,6 @@ function PostHeader({ user, onEdit, onDelete }) {
 
   return (
     <div className="flex items-center justify-between p-3 relative">
-      {/* Left */}
       <div className="flex items-center gap-3">
         <Avatar src={user.avatar} />
 
@@ -17,7 +16,6 @@ function PostHeader({ user, onEdit, onDelete }) {
         </div>
       </div>
 
-      {/* Right (Menu) */}
       <div className="relative">
         <button onClick={() => setShowMenu((prev) => !prev)}>
           <FaEllipsisH className="text-gray-600" />

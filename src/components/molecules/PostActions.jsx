@@ -23,7 +23,6 @@ function PostActions() {
 
   return (
     <div className="w-full flex justify-between items-center px-4 py-2">
-      {/* Left Actions */}
       <div className="flex gap-4 text-gray-700">
         {postActions.map((action, index) => (
           <Button
@@ -37,7 +36,6 @@ function PostActions() {
         ))}
       </div>
 
-      {/* Save Button */}
       <button className="text-xl text-gray-700 hover:text-yellow-500 transition">
         <FaBookmark />
       </button>

@@ -1,25 +1,13 @@
-export const createPost = (user, caption, image) => {
+export const createPostService = (user, post) => {
   return {
-    id: Date.now(),
-    user,
-    caption,
-    image,
-    createdAt: new Date(),
-    updatedAt: null,
+    id: Date.now().toString(),
+    user: {
+      name: user.name,
+      avatar: user.avatar,
+    },
+    caption: post.caption,
+    image: post?.image || null,
+    video: post?.video || null,
+    createdAt: new Date().toISOString(),
   };
-};
-export const editPost = (posts, postId, updatedData) => {
-  return posts.map((post) => {
-    if (post.id === postId) {
-      return {
-        ...post,
-        ...updatedData,
-        updatedAt: new Date(),
-      };
-    }
-    return post;
-  });
-};
-export const deletePost = (posts, postId) => {
-  return posts.filter((post) => post.id !== postId);
 };
