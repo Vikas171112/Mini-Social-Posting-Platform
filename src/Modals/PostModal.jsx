@@ -1,7 +1,7 @@
 import React from "react";
 import { FaTimes } from "react-icons/fa";
 
-function PostModal({ isOpen, onClose }) {
+function PostModal({ isOpen, onClose, type }) {
   if (!isOpen) return null;
 
   return (
@@ -16,7 +16,7 @@ function PostModal({ isOpen, onClose }) {
         </div>
 
         <div className="p-4">
-          <p>Modal is working </p>
+          <p>{type} </p>
         </div>
       </div>
     </div>

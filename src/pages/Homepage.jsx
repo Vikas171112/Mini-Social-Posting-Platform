@@ -6,11 +6,12 @@ import PostModal from "../Modals/PostModal";
 
 function Homepage() {
   const [isOpen, setIsOpen] = useState(false);
+  const [type, setType] = useState("caption");
   return (
     <FeedLayout>
-      <PostBox onOpen={() => setIsOpen(true)} />
+      <PostBox onOpen={() => setIsOpen(true)} onSelectType={setType} />
       <PostList />
-      <PostModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <PostModal isOpen={isOpen} type={type} onClose={() => setIsOpen(false)} />
     </FeedLayout>
   );
 }

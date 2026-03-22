@@ -8,6 +8,7 @@ function PostTypes({ postTypes }) {
     <div className="flex gap-4 mt-4 justify-center ">
       {postTypes.map((type, index) => (
         <Button
+          onClick={type.onClick}
           key={index}
           className="bg-white hover:bg-gray-200 text-black-500 flex justify-center items-center gap-2 cursor-pointer"
         >
