@@ -1,110 +1,83 @@
-import React, { useRef } from "react";
-import { FaTimes } from "react-icons/fa";
-import Button from "../components/atoms/Button";
-import { createPostService } from "../services/postService";
-import { user } from "../constants/currentUser";
+import React, { useRef, useState, useEffect } from "react";
 
-function PostModal({ isOpen, onClose, type, onCreate }) {
-  if (!isOpen) return null;
+function PostModal({
+  isOpen,
+  onClose,
+  onCreate,
+  onEdit,
+  isEdit,
+  existingPost,
+}) {
+  const [preview, setPreview] = useState(null);
+  const [caption, setCaption] = useState(""); // 🔥 controlled input
 
-  const textRef = useRef();
   const fileRef = useRef();
 
-  const handleSubmit = () => {
-    const caption = textRef.current?.value || "";
+  // ✅ SAFE PREFILL
+  useEffect(() => {
+    if (isEdit && existingPost) {
+      setCaption(existingPost.caption || "");
+      setPreview(existingPost.image || null);
+    }
+  }, [isEdit, existingPost]);
+
+  if (!isOpen) return null;
+
+  const handleFile = () => {
     const file = fileRef.current?.files[0];
-
-    let fileUrl = null;
-
     if (file) {
-      fileUrl = URL.createObjectURL(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!caption.trim()) return;
+
+    if (isEdit) {
+      onEdit(existingPost.id, {
+        caption,
+        image: preview,
+      });
+    } else {
+      onCreate({
+        caption,
+        image: preview,
+      });
     }
 
-    const post = {
-      caption: caption.trim(),
-      image: type === "Image" ? fileUrl : null,
-      video: type === "Video" ? fileUrl : null,
-    };
-
-    if (!post.caption) {
-      console.log(" Empty post not allowed");
-      alert("Please Add something to Post");
-      return;
-    }
-
-    const finalPost = createPostService(user, post);
-
-    onCreate(finalPost);
+    // reset
+    setCaption("");
+    setPreview(null);
 
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-      <div className="bg-white w-full max-w-2xl rounded-xl shadow-lg overflow-hidden">
-        {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="font-semibold text-lg">Create {type} Post</h2>
-          <button onClick={onClose}>
-            <FaTimes />
-          </button>
-        </div>
+    <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+      <div className="bg-white p-4 rounded-xl w-full max-w-md flex flex-col gap-3">
+        <textarea
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          className="w-full border p-2"
+          placeholder="Write something..."
+        />
 
-        {/* Body */}
-        <div className="p-4 flex flex-col gap-4">
-          {/* Caption / Article */}
-          {(type === "caption" || type === "Article") && (
-            <textarea
-              ref={textRef}
-              placeholder="What do you want to talk about?"
-              className="w-full border rounded-xl p-3 outline-none min-h-[120px]"
-            />
-          )}
+        <input type="file" ref={fileRef} onChange={handleFile} />
 
-          {/* Image */}
-          {type === "Image" && (
-            <>
-              <input
-                type="file"
-                ref={fileRef}
-                accept="image/*"
-                className="border p-2 rounded"
-              />
-              <textarea
-                ref={textRef}
-                placeholder="Add a caption..."
-                className="w-full border rounded-xl p-3 outline-none min-h-[100px]"
-              />
-            </>
-          )}
+        {preview && (
+          <img
+            src={preview}
+            alt="preview"
+            className="w-full h-40 object-cover rounded"
+          />
+        )}
 
-          {/* Video */}
-          {type === "Video" && (
-            <>
-              <input
-                type="file"
-                ref={fileRef}
-                accept="video/*"
-                className="border p-2 rounded"
-              />
-              <textarea
-                ref={textRef}
-                placeholder="Add a caption..."
-                className="w-full border rounded-xl p-3 outline-none min-h-[100px]"
-              />
-            </>
-          )}
-
-          {/* Footer */}
-          <div className="flex justify-end">
-            <Button
-              onClick={handleSubmit}
-              className="bg-orange-500 text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:bg-orange-600 active:scale-95 transition-all duration-200"
-            >
-              Post
-            </Button>
-          </div>
-        </div>
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 text-white p-2 rounded"
+        >
+          {isEdit ? "Update" : "Post"}
+        </button>
       </div>
     </div>
   );

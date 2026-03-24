@@ -1,4 +1,9 @@
 import { useState } from "react";
+import {
+  createPostService,
+  deletePostService,
+  editPostService,
+} from "../services/postService";
 
 export const usePosts = () => {
   const [posts, setPosts] = useState([
@@ -26,11 +31,26 @@ export const usePosts = () => {
     },
   ]);
   const handleCreatePost = (post) => {
-    setPosts((prev) => [post, ...prev]);
+    const user = {
+      name: "Vikas",
+      avatar: "https://i.pravatar.cc/150?img=3",
+    };
+
+    const newPost = createPostService(user, post);
+
+    setPosts((prev) => [newPost, ...prev]);
+  };
+  const handleEditPost = (postId, updatedData) => {
+    setPosts((prev) => editPostService(prev, postId, updatedData));
   };
 
+  const handleDeletePost = (postId) => {
+    setPosts((prev) => deletePostService(prev, postId));
+  };
   return {
     posts,
     handleCreatePost,
+    handleEditPost,
+    handleDeletePost,
   };
 };

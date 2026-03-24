@@ -8,12 +8,17 @@ import { usePosts } from "../hooks/usePosts";
 function Homepage() {
   const [isOpen, setIsOpen] = useState(false);
   const [type, setType] = useState("caption");
-  const { handleCreatePost, posts } = usePosts();
+  const { handleCreatePost, posts, handleEditPost, handleDeletePost } =
+    usePosts();
 
   return (
     <FeedLayout>
       <PostBox onOpen={() => setIsOpen(true)} onSelectType={setType} />
-      <PostList posts={posts} />
+      <PostList
+        posts={posts}
+        onEdit={handleEditPost}
+        onDelete={handleDeletePost}
+      />
       <PostModal
         isOpen={isOpen}
         type={type}

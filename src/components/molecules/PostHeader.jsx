@@ -1,46 +1,66 @@
-import React, { useState } from "react";
-import Avatar from "../atoms/Avatar";
-import { FaEllipsisH, FaEdit, FaTrash } from "react-icons/fa";
+import React, { useState, useRef, useEffect } from "react";
+import { FaEllipsisH } from "react-icons/fa";
 
 function PostHeader({ user, onEdit, onDelete }) {
-  const [showMenu, setShowMenu] = useState(false);
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef();
+
+  // 🔥 Outside click close
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <div className="flex items-center justify-between p-3 relative">
+    <div className="flex justify-between items-center">
+      {/* 🔹 USER INFO */}
       <div className="flex items-center gap-3">
-        <Avatar src={user?.avatar} />
+        <img
+          src={user?.avatar}
+          alt="avatar"
+          className="w-10 h-10 rounded-full object-cover"
+        />
 
         <div>
-          <p className="text-sm font-semibold">{user?.name}</p>
-          <p className="text-xs text-gray-500">5 min ago</p>
+          <p className="font-semibold">{user?.name}</p>
+          <p className="text-xs text-gray-500">Just now</p>
         </div>
       </div>
 
-      <div className="relative">
-        <button onClick={() => setShowMenu((prev) => !prev)}>
-          <FaEllipsisH className="text-gray-600" />
-        </button>
+      {/* 🔹 ACTION BUTTON */}
+      <div className="relative" ref={menuRef}>
+        <FaEllipsisH
+          className="cursor-pointer"
+          onClick={() => setOpen((prev) => !prev)}
+        />
 
-        {showMenu && (
-          <div className="absolute right-0 mt-2 w-32 bg-white border rounded-md shadow-md z-10">
+        {/* 🔥 DROPDOWN */}
+        {open && (
+          <div className="absolute right-0 mt-2 w-28 bg-white shadow-md rounded">
             <button
               onClick={() => {
                 onEdit();
-                setShowMenu(false);
+                setOpen(false);
               }}
-              className="flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-gray-100"
+              className="block w-full text-left px-3 py-2 hover:bg-gray-100"
             >
-              <FaEdit /> Edit
+              Edit
             </button>
 
             <button
               onClick={() => {
                 onDelete();
-                setShowMenu(false);
+                setOpen(false);
               }}
-              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-500 hover:bg-gray-100"
+              className="block w-full text-left px-3 py-2 hover:bg-gray-100 text-red-500"
             >
-              <FaTrash /> Delete
+              Delete
             </button>
           </div>
         )}
